@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>☠ SISTEMA COMPROMETIDO ☠</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{width:100%;height:100%;overflow:hidden;background:#000;
+    font-family:'Courier New',monospace;-webkit-tap-highlight-color:transparent;user-select:none}
+  #stage{position:fixed;inset:0}
+  #matrix{position:absolute;inset:0;width:100%;height:100%;display:block}
+  .scan{position:fixed;inset:0;z-index:50;pointer-events:none;
+    background:repeating-linear-gradient(0deg,rgba(0,0,0,.28) 0,rgba(0,0,0,.28) 1px,transparent 1px,transparent 3px),
+    radial-gradient(ellipse at center,transparent 55%,rgba(0,0,0,.8) 100%);
+    animation:roll 6s linear infinite}
+  @keyframes roll{to{background-position:0 60px,0 0}}
+  .flash{position:fixed;inset:0;z-index:45;pointer-events:none;background:#ff0033;opacity:0}
+  .term{position:fixed;top:0;left:0;right:0;bottom:0;padding:calc(12px + env(safe-area-inset-top,0px)) 14px 14px;
+    z-index:10;pointer-events:none;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-start;
+    font-size:clamp(11px,3.1vw,14px);line-height:1.55;color:#ff2a3d;text-shadow:0 0 7px rgba(255,0,40,.9)}
+  .term .l{white-space:pre-wrap;word-break:break-all}
+  .term .w{color:#ffd0d0;text-shadow:0 0 10px #f00}
+  .term .p{color:#ff8fab;text-shadow:0 0 9px #ff2d55}
+  .term .k{color:#fff;text-shadow:0 0 10px #ff2d55,0 0 20px #f03}
+  .alert{position:fixed;inset:0;z-index:30;display:none;align-items:center;justify-content:center;
+    text-align:center;pointer-events:none;background:rgba(40,0,0,.55)}
+  .alert.on{display:flex;animation:blink .35s steps(2) infinite}
+  @keyframes blink{50%{background:rgba(160,0,10,.7)}}
+  .alert b{display:block;font-size:clamp(34px,11vw,64px);color:#fff;letter-spacing:2px;
+    text-shadow:0 0 14px #f00,0 0 40px #f00}
+  .alert span{display:block;margin-top:10px;font-size:clamp(12px,3.6vw,16px);color:#ff6b6b}
+  .glitch{position:relative;display:inline-block}
+  .glitch::before,.glitch::after{content:attr(data-t);position:absolute;left:0;top:0;width:100%;height:100%;
+    text-align:center;overflow:hidden}
+  .glitch::before{color:#00e5ff;text-shadow:none;transform:translateX(-3px);animation:g1 1.6s steps(1) infinite}
+  .glitch::after{color:#ff0040;text-shadow:none;transform:translateX(3px);animation:g2 1.3s steps(1) infinite}
+  @keyframes g1{0%,100%{clip-path:inset(0 0 100% 0)}10%{clip-path:inset(10% 0 60% 0)}
+    30%{clip-path:inset(55% 0 20% 0)}50%{clip-path:inset(0 0 100% 0)}70%{clip-path:inset(75% 0 5% 0)}90%{clip-path:inset(30% 0 50% 0)}}
+  @keyframes g2{0%,100%{clip-path:inset(100% 0 0 0)}15%{clip-path:inset(40% 0 35% 0)}
+    35%{clip-path:inset(0 0 85% 0)}55%{clip-path:inset(100% 0 0 0)}75%{clip-path:inset(60% 0 15% 0)}}
+  .grant{position:fixed;inset:0;z-index:35;display:none;align-items:center;justify-content:center;
+    text-align:center;pointer-events:none}
+  .grant.on{display:flex}
+  .grant h2{font-size:clamp(30px,9.5vw,58px);color:#fff;text-shadow:0 0 14px #f03,0 0 40px #f03;line-height:1.2}
+  .final{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%) scale(.8);
+    text-align:center;z-index:40;opacity:0;transition:all 1.4s ease;pointer-events:none;width:92%;max-width:560px}
+  .final.show{opacity:1;transform:translate(-50%,-50%) scale(1)}
+  .final h1{font-family:Georgia,serif;font-weight:700;font-size:clamp(30px,9.5vw,64px);line-height:1.15;color:#fff;
+    text-shadow:0 0 12px #ff2d55,0 0 28px #ff2d55,0 0 48px #ff69b4,0 0 80px #ff0040;animation:glow 2.4s ease-in-out infinite}
+  @keyframes glow{0%,100%{text-shadow:0 0 12px #ff2d55,0 0 28px #ff2d55,0 0 48px #ff69b4}
+    50%{text-shadow:0 0 18px #ff2d55,0 0 40px #ff2d55,0 0 70px #ff69b4,0 0 100px #ff0040}}
+  .final .heart{display:inline-block;font-size:clamp(36px,11vw,64px);margin-top:18px;
+    filter:drop-shadow(0 0 18px #ff2d55) drop-shadow(0 0 36px #ff0040);animation:beat 1.1s ease-in-out infinite}
+  @keyframes beat{0%,100%{transform:scale(1)}20%{transform:scale(1.25)}40%{transform:scale(.98)}60%{transform:scale(1.15)}}
+  .shake{animation:shake .12s linear infinite}
+  @keyframes shake{0%{transform:translate(2px,1px)}25%{transform:translate(-3px,-2px)}
+    50%{transform:translate(3px,-1px)}75%{transform:translate(-2px,3px)}100%{transform:translate(1px,-3px)}}
+  .fh{position:fixed;z-index:42;pointer-events:none;will-change:transform,opacity;
+    filter:drop-shadow(0 0 8px #ff2d55);animation:up var(--d) ease-out forwards}
+  @keyframes up{0%{opacity:0;transform:translate(0,0) scale(.4)}12%{opacity:1}
+    100%{opacity:0;transform:translate(var(--x),var(--y)) scale(1.1) rotate(var(--r))}}
+  .hint{position:fixed;left:0;right:0;bottom:calc(18px + env(safe-area-inset-bottom,0px));text-align:center;z-index:44;
+    color:#ff8fab;font-size:13px;opacity:0;text-shadow:0 0 8px #ff2d55;transition:opacity 1s;pointer-events:none}
+  .hint.show{opacity:.85}
+</style></head><body>
+<div id="stage"><canvas id="matrix"></canvas></div>
+<div class="term" id="term"></div>
+<div class="alert" id="alert"><div><b>⚠ INTRUSÃO ⚠</b><b>DETECTADA</b><span>firewall comprometido · 1 invasor</span></div></div>
+<div class="grant" id="grant"><h2 class="glitch" data-t="ACESSO CONCEDIDO">ACESSO CONCEDIDO</h2></div>
+<div class="final" id="final">
+  <h1 class="glitch" data-t="euteamo, minha princesa!">euteamo, minha princesa!</h1>
+  <div class="heart">❤️</div>
+</div>
+<div class="hint" id="hint">toque na tela ♥</div>
+<div class="flash" id="flash"></div>
+<div class="scan"></div>
+<script>
+(function(){
+  var $=function(i){return document.getElementById(i)};
+  var canvas=$('matrix'),ctx=canvas.getContext('2d'),stage=$('stage');
+  var BIN=Array.from('01010011ABCDEF♥xX<>/\\{}#$%'),LOVE=Array.from('EUTEAMO♥ ');
+  var RED=['#ff0020','#b00018','#ff2d3d','#7a0010','#ff4d4d'];
+  var PINK=['#ff2d55','#ff0040','#ff69b4','#ff8fab','#ffffff','#ffb3c9'];
+  var letters=BIN,colors=RED,alpha=.1;
+  var dpr=Math.min(window.devicePixelRatio||1,2),W,H,fs,cols,drops,speeds,cc;
+  function pick(){return colors[(Math.random()*colors.length)|0]}
+  function setup(){
+    W=innerWidth;H=innerHeight;canvas.width=W*dpr;canvas.height=H*dpr;
+    canvas.style.width=W+'px';canvas.style.height=H+'px';ctx.setTransform(dpr,0,0,dpr,0,0);
+    fs=Math.max(16,Math.min(26,Math.floor(W/16)));cols=Math.ceil(W/fs);drops=[];speeds=[];cc=[];
+    for(var i=0;i<cols;i++){drops[i]=Math.random()*-60;speeds[i]=.55+Math.random()*1.1;cc[i]=pick();}
+    ctx.fillStyle='#000';ctx.fillRect(0,0,W,H);
+  }
+  var last=0;
+  function frame(now){requestAnimationFrame(frame);
+    if(now-last<55)return;last=now;
+    ctx.fillStyle='rgba(0,0,0,'+alpha+')';ctx.fillRect(0,0,W,H);
+    ctx.font='bold '+fs+"px 'Courier New',monospace";ctx.textAlign='center';ctx.textBaseline='middle';
+    for(var i=0;i<cols;i++){
+      var ch=letters[(Math.random()*letters.length)|0],x=i*fs+fs/2,y=drops[i]*fs;
+      ctx.shadowColor=cc[i];ctx.shadowBlur=14;
+      ctx.fillStyle=Math.random()<.3?'#fff':cc[i];ctx.fillText(ch,x,y);
+      ctx.shadowBlur=0;ctx.globalAlpha=.55;ctx.fillStyle=cc[i];ctx.fillText(ch,x,y-fs);ctx.globalAlpha=1;
+      drops[i]+=speeds[i];
+      if(y>H+fs&&Math.random()>.965){drops[i]=Math.random()*-25;speeds[i]=.55+Math.random()*1.1;cc[i]=pick();}
+    }
+  }
+
+  var sleep=function(ms){return new Promise(function(r){setTimeout(r,ms)})};
+  function vib(p){try{navigator.vibrate&&navigator.vibrate(p)}catch(e){}}
+  var flashEl=$('flash');
+  function flash(c){flashEl.style.background=c||'#ff0033';flashEl.style.transition='none';flashEl.style.opacity=.55;
+    requestAnimationFrame(function(){flashEl.style.transition='opacity .35s';flashEl.style.opacity=0;});}
+  var term=$('term'),skip=false,done=false;
+  function addLine(t,cls){var el=document.createElement('div');el.className='l '+(cls||'');el.textContent=t;term.appendChild(el);
+    while(term.scrollHeight>term.clientHeight&&term.children.length>1)term.removeChild(term.firstChild);return el;}
+  async function type(t,cls,sp){var el=addLine('',cls);
+    for(var i=1;i<=t.length;i++){if(skip)return;el.textContent=t.slice(0,i);await sleep(sp||22);}
+    return el;}
+  function hex(n){var s='';for(var i=0;i<n;i++)s+=((Math.random()*16)|0).toString(16);return s;}
+
+  async function run(){
+    await sleep(500);
+    $('alert').classList.add('on');stage.classList.add('shake');vib([200,80,200,80,400]);flash();
+    await sleep(2200);if(skip)return;
+    $('alert').classList.remove('on');stage.classList.remove('shake');
+
+    var ip=[192,168,(Math.random()*255)|0,(Math.random()*255)|0].join('.');
+    var pre=['> root@invasor:~# ./invadir --alvo=coracao','> rastreando IP '+ip+' ...','> contornando firewall ...',
+      '> porta 22 ... ABERTA','> porta 80 ... ABERTA','> porta 443 ... ABERTA','> quebrando criptografia RSA-4096 ...'];
+    for(var i=0;i<pre.length;i++){if(skip)return;await type(pre[i],i===0?'k':'',14);await sleep(120);
+      if(i===2)flash();}
+    for(var n=0;n<14&&!skip;n++){addLine('0x'+hex(8)+'  '+hex(16)+'  '+hex(16),'');await sleep(55);}
+    var bar=addLine('','w');
+    for(var p=0;p<=100&&!skip;p+=4){var f=Math.round(p/5);
+      bar.textContent='[ '+'█'.repeat(f)+'░'.repeat(20-f)+' ] '+p+'%';vib(8);await sleep(70);}
+    if(skip)return;
+    await sleep(300);addLine('> SENHA DESCOBERTA: **********','w');await sleep(600);
+
+    $('grant').classList.add('on');stage.classList.add('shake');flash('#fff');vib([300,100,300]);
+    await sleep(1500);if(skip)return;
+    $('grant').classList.remove('on');stage.classList.remove('shake');
+
+    term.innerHTML='';
+    letters=LOVE;colors=PINK;alpha=.09;for(var c=0;c<cols;c++)cc[c]=pick();
+    var tw=['> acesso total ao sistema...','> ALVO: ♥ SEU CORAÇÃO ♥','> defesas encontradas: 0','> arquivo encontrado: saudade.dll',
+      '> arquivo encontrado: pensando_em_voce.exe','> copiando 100% dos meus sentimentos...','> ERRO: impossível deletar. ♥','> STATUS: CORAÇÃO CAPTURADO ✓'];
+    for(var j=0;j<tw.length;j++){if(skip)return;await type(tw[j],j===tw.length-1?'k':'p',40);await sleep(300);}
+    await sleep(700);showFinal();
+  }
+
+  var glyphs=['❤️','💖','💗','💕','♥'];
+  function heart(x,y,spread){var el=document.createElement('div');el.className='fh';
+    el.textContent=glyphs[(Math.random()*glyphs.length)|0];el.style.left=x+'px';el.style.top=y+'px';
+    el.style.fontSize=(16+Math.random()*26)+'px';el.style.setProperty('--x',((Math.random()-.5)*spread)+'px');
+    el.style.setProperty('--y',(-(120+Math.random()*260))+'px');el.style.setProperty('--r',((Math.random()-.5)*50)+'deg');
+    var d=2.4+Math.random()*1.8;el.style.setProperty('--d',d+'s');document.body.appendChild(el);
+    setTimeout(function(){el.remove()},d*1000+100);}
+  function showFinal(){if(done)return;done=true;skip=true;
+    $('alert').classList.remove('on');$('grant').classList.remove('on');stage.classList.remove('shake');
+    letters=LOVE;colors=PINK;alpha=.09;for(var c=0;c<cols;c++)cc[c]=pick();
+    flash('#ff2d55');vib([120,60,120,60,300]);$('final').classList.add('show');
+    for(var k=0;k<26;k++)(function(k){setTimeout(function(){heart(Math.random()*W,H*.75,200)},k*70)})(k);
+    setInterval(function(){heart(Math.random()*W,H-10,120)},320);
+    setTimeout(function(){$('hint').classList.add('show')},2400);}
+  function tap(e){var p=(e.touches&&e.touches[0])||e;
+    if(!done){showFinal();return;}
+    for(var k=0;k<7;k++)heart(p.clientX+(Math.random()-.5)*30,p.clientY,160);}
+  document.addEventListener('touchstart',tap,{passive:true});
+  document.addEventListener('click',function(e){if(!('ontouchstart' in window))tap(e)});
+  addEventListener('resize',function(){dpr=Math.min(devicePixelRatio||1,2);setup()});
+  setup();requestAnimationFrame(frame);run();
+})();
+</script></body></html>
